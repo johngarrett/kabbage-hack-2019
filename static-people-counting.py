@@ -7,21 +7,14 @@ from imutils.object_detection import non_max_suppression
 #setup HOG detector 
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
-
-# background removal
-fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
-
 cv2.startWindowThread()
-# cap = cv2.VideoCapture("https://stream-uc2-delta.dropcam.com/nexus_aac/ccb95a5e149846948179d0428ecc9304/chunklist_w803407664.m3u8?public=ScE29hOA5L")
-cap = cv2.VideoCapture("videos/hallway_cut.mov")
 
 def detector(image):
-#    image = imutils.resize(image, width=min(400, image.shape[1]))
+    #  image = imutils.resize(image, width=min(400, image.shape[1]))
+    #image = imutils.resize(image, width=min(400, image.shape[1]))
     
     # smoothing without removing edges
-    image = cv2.bilateralFilter(image, 7, 50, 50)
-   # image = fgbg.apply(image)
-
+    # image = cv2.bilateralFilter(image, 7, 50, 50)
 
     rects, weight = hog.detectMultiScale(image,  winStride=(8,8), padding=(32, 32), scale=1.05)
 
@@ -30,21 +23,13 @@ def detector(image):
 
     return result, image 
 
-def cameraDetect():
-    while True:
-        ret, frame = cap.read()
- #       frame = imutils.resize(frame, width=min(400, frame.shape[1]))
-        result, frame = detector(frame.copy())
+def imageDetect():
+        frame = cv2.imread('hallway2.jpeg', 1)
+        result, frame = detector(frame)
 
         for (xA, yA, xB, yB) in result:
             cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 255, 0), 2)
         cv2.imshow('frame', frame)
-        
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
-
+        cv2.waitKey(0)        
 if __name__ == '__main__':
-    cameraDetect()
+    imageDetect()
