@@ -1,4 +1,4 @@
 export interface Lunch {
     date: string;
-    lunch: string;
+    menu: string;
 }

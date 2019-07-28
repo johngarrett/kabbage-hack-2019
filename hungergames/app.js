@@ -3,8 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongodb = require('mongodb');
 
-var apiRouter = require('./routes/api');
+var lunchesRouter = require('./routes/lunches');
 
 var app = express();
 
@@ -18,10 +19,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api', apiRouter);
+app.use('/api/lunches', lunchesRouter);
 
 var distDir = __dirname + "/client/dist/client";
 app.use(express.static(distDir));
+
+var db;
+mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/test", function (err, client) {
+    if (err) {
+        console.log(err);
+        process.exit(1);
+    }
+
+    db = client.db();
+});
+app.use(function(req,res,next){req.db = db;next();});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
