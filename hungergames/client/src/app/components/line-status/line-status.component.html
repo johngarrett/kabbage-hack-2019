@@ -1,0 +1,30 @@
+<div class="line-status">
+    <div class="col-xs-12 col-md-4">
+        <div class="sectionTitle">
+            Line status:
+        </div>
+        <div class="sectionText">
+            {{ _lineStatus.lineOpen ? "Opened" : "Closed" }}
+        </div>
+        <br />
+        <div class="sectionTitle">
+            # of people in line:
+        </div>
+        <div class="sectionText">
+            {{ _lineStatus.lineLength }}
+        </div>
+        <br />
+        <div class="sectionTitle">
+            Wait time:
+        </div>
+        <div class="sectionText">
+            {{ _lineStatus.waitTime }} minutes
+        </div>
+    </div>
+</div>
+
+<div class="col-xs-12 col-md-8" id="hungergames-plot">
+  <script>
+      Plotly.newPlot('hungergames-plot', {{ data }}, {{ layout }}, { responsive: true });
+  </script>
+</div>
