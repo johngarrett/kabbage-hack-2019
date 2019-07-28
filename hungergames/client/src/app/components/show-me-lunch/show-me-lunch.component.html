@@ -1,5 +1,4 @@
-<div class="show-me-lunch">
-    <h3>Show Me Lunch</h3>
-    <p>{{ this._currentLunch.date }}</p>
-    <p>{{ this._currentLunch.lunch }}</p>
-</div>
+<h3>Show Me Lunch</h3>
+<img src="/back.png" (click)="prevDay()">
+<todays-lunch [date]="this._currentDate"></todays-lunch>
+<img src="/next.png" (click)="nextDay()">

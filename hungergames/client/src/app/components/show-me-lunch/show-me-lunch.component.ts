@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router } from '@angular/router';
-import { Lunch } from '../../models/lunch.model';
-import { LunchService } from '../../services/lunch/lunch.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'show-me-lunch',
@@ -10,17 +8,20 @@ import { LunchService } from '../../services/lunch/lunch.service';
 })
 export class ShowMeLunchComponent implements OnInit {
 
-    @Input('date') _lunchDate: string;
+    constructor( ) { }
 
-    constructor(
-        private _lunchService: LunchService,
-        private _router: Router
-    ) { }
-
-    private _currentLunch: Lunch;
+    private _currentDate: moment.Moment;
 
     ngOnInit() {
-        this._currentLunch = this._lunchService.getLunch(this._lunchDate);
+        this._currentDate = moment();
+    }
+
+    prevDay() {
+        this._currentDate = moment(this._currentDate).subtract(1, 'days');
+    }
+
+    nextDay() {
+        this._currentDate = moment(this._currentDate).add(1, 'days');
     }
 
 }

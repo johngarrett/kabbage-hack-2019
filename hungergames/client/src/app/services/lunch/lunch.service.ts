@@ -10,10 +10,10 @@ export class LunchService {
 
     constructor() { }
 
-    getLunch(date: string) : Lunch {
-        let targetDate = moment(date).format('YYYY-MM-DD');
+    getLunch(date: moment.Moment) : Lunch {
+        let targetDate = date.format('YYYY-MM-DD');
         return {
-          date: moment(date).format('ddd MM/DD/YYYY'),
+          date: date.format('ddd MM/DD/YYYY'),
           lunch: "yes"
         };
     }

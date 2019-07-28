@@ -8,6 +8,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { LineStatusComponent } from './components/line-status/line-status.component';
 import { CamFeedComponent } from './components/cam-feed/cam-feed.component';
 import { LunchService } from './services/lunch/lunch.service';
+import { TodaysLunchComponent } from './components/todays-lunch/todays-lunch.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { LunchService } from './services/lunch/lunch.service';
     ShowMeLunchComponent,
     HeaderComponent,
     LineStatusComponent,
-    CamFeedComponent
+    CamFeedComponent,
+    TodaysLunchComponent,
   ],
   imports: [
     BrowserModule,
