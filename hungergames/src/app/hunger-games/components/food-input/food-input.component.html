@@ -1,0 +1,41 @@
+<div class="container card" align="center">
+    <div class="food-input">
+        <form [formGroup]="foodInputForm">
+            <label>
+                Amount Ordered:
+                <input type="number" formControlName="ordered" />
+            </label>
+            <br />
+            <label>
+                Amount Left Over
+                <input type="number" formControlName="leftOver" />
+            </label>
+            <br />
+            <label>
+                Main Course
+                <input type="text" formControlName="mainCourse"/>
+            </label>
+            <br />
+            <button (click)="reset()">Reset</button>
+            <button type="submit" (click)="submit()">Save</button>
+        </form>
+
+        <br />
+        <table class="foodinput-table">
+            <thead>
+                <td>Timestamp</td>
+                <td>Amount Ordered</td>
+                <td>Amount Left Over</td>
+                <td>Main Course</td>
+            </thead>
+            <tbody>
+                <tr *ngFor="let input of _recentFoodInputs">
+                    <td> {{ input.timestamp }} </td>
+                    <td> {{ input.ordered }} </td>
+                    <td> {{ input.leftOver }} </td>
+                    <td> {{ input.mainCourse }} </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
         private _router: Router
     ) { }
 
-    private passwordControl = new FormControl('');
+    passwordControl = new FormControl('');
 
     ngOnInit() {
     }

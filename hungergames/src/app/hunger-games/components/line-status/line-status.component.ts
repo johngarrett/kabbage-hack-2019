@@ -14,7 +14,7 @@ export class LineStatusComponent implements OnInit {
 
     constructor(private _lunchService: LunchService) { }
 
-    private _lineStatus: LineStatus;
+    _lineStatus: LineStatus;
 
     ngOnInit() {
         this._lineStatus = {
