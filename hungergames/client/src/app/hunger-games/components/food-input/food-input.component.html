@@ -1,14 +1,26 @@
+<div class="container" align="center">
 <div class="food-input">
-    <!-- <div class="form">
-        <form class="simple-form">
-            <label>Amount Ordered <input type="number" ng-model="foodinput.ordered" /></label><br />
-            <label>Amount Left Over <input type="number" ng-model="foodinput.leftOver" /></label><br />
-            <label>Main Course <input type="text" ng-model="foodinput.mainCourse"/></label><br />
-            <input type="button" ng-click="reset()" value="Reset" />
-            <input type="submit" ng-click="update(foodinput)" value="Save" />
-        </form>
-    </div> -->
+    <form [formGroup]="foodInputForm">
+        <label>
+            Amount Ordered:
+            <input type="number" formControlName="ordered" />
+        </label>
+        <br />
+        <label>
+            Amount Left Over
+            <input type="number" formControlName="leftOver" />
+        </label>
+        <br />
+        <label>
+            Main Course
+            <input type="text" formControlName="mainCourse"/>
+        </label>
+        <br />
+        <button (click)="reset()">Reset</button>
+        <button type="submit" (click)="submit()">Save</button>
+    </form>
 
+    <br />
     <table class="foodinput-table">
         <thead>
             <td>Timestamp</td>
@@ -17,6 +29,13 @@
             <td>Main Course</td>
         </thead>
         <tbody>
+            <tr *ngFor="let input of _recentFoodInputs">
+                <td> {{ input.timestamp }} </td>
+                <td> {{ input.ordered }} </td>
+                <td> {{ input.leftOver }} </td>
+                <td> {{ input.mainCourse }} </td>
+            </tr>
         </tbody>
     </table>
+</div>
 </div>

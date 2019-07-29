@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
+import { FoodInput } from '../../models/food-input.model';
 import { LineStatus } from '../../models/line-status.model';
 import { Lunch } from '../../models/lunch.model';
 import * as moment from 'moment';
@@ -33,5 +34,15 @@ export class LunchService {
                 linePace: 0
             }))
         );
+    }
+
+    getRecentFoodInputs(): Observable<Array<FoodInput>> {
+        console.log("getting recent inputs");
+        return of([]);
+    }
+
+    postFoodInput(input: FoodInput): Observable<boolean> {
+        console.log("posting food input", input);
+        return of(true);
     }
 }
