@@ -11,20 +11,16 @@ from imutils.video import VideoStream
 app = Flask(__name__)
 api = Api(app)
 
-persons_count = 0
-vs = cv2.VideoCapture('https://stream-us1-foxtrot.dropcam.com/nexus_aac/f2a6b836da604bae9ca428635c173814/chunklist_w1121249579.m3u8?public=6F7uwYxcUX')
 class PersonDetection(Resource):
-    global persons_count
+    vs = cv2.VideoCapture('https://stream-us1-foxtrot.dropcam.com/nexus_aac/f2a6b836da604bae9ca428635c173814/chunklist_w1121249579.m3u8?public=6F7uwYxcUX')
     def count_people():
         refrence_frame = None
         frame_count = 0
         total_persons_count = 0
         print(f'Video stream is opened: {vs.isOpened()}')
         while True:
-            print('entering the loop', file=sys.stderr)
             frame_count += 1
             _, current_frame = vs.read()
-            print(vs, file=sys.stderr)
             if current_frame is None:
                 print('no current frame!', file=sys.stderr)
                 break
@@ -59,24 +55,27 @@ class PersonDetection(Resource):
                 rects.append(cv2.boundingRect(contour))
             cv2.groupRectangles(rects, 1, 5)
             total_persons_count += len(rects)
-            persons_count = round(total_persons_count / frame_count)
-            print(persons_count, file=sys.stderr)
+            f = open("personsCount", "w")
+            f.write(str(round(total_persons_count / frame_count)))
+            f.close()
 
 class LineStatistics(Resource):
-    global persons_count
-    def line_open():
+    def line_open(self):
         current_time = datetime.datetime.now()
         if current_time.hour == 11 and current_time.minute > 38:
-            return true
+            return True
         elif current_time.hour == 2 and current_time.minute > 2:
-            return true
+            return True
         else:
-            return false
+            return False
     def get(self):
-        return persons_count
+        f = open("personsCount", "r")
+        count = int(f.read())
+        f.close()
+        return {'lineOpen': self.line_open(), 'lineLength':count, 'linePace':persons_count }
 
 
 api.add_resource(LineStatistics, '/')
 if __name__ == '__main__':
-    thread = threading.Thread(target=PersonDetection.count_people).start()
-    app.run(host='0.0.0.0', port=80, debug=True)
+    threading.Thread(target=PersonDetection.count_people).start()
+    threading.Thread(target=app.run(host='0.0.0.0', port=80, debug=True)).start()
