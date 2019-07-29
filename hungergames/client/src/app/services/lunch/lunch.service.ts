@@ -19,7 +19,7 @@ export class LunchService {
         let targetDate = date.format('YYYY-MM-DD');
         return this._http.get('/api/lunches/' + targetDate).pipe(
             catchError((err): Observable<any> => of({
-                date: targetDate,
+                date: date,
                 menu: "Not found"
             }))
         );

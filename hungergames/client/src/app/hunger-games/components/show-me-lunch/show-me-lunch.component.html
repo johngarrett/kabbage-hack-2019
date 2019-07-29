@@ -1,12 +1,15 @@
-<h3>Show Me Lunch</h3>
 <div class="row">
-    <div class="col-sm-3" align="right-md center-sm">
-        <img src="/images/back.png" (click)="prevDay()">
+    <div class="col-sm-2" align="right-md center-sm">
+        <img src="/images/back.png" (click)="changeDay(-1)">
     </div>
-    <div class="col-sm-6">
-        <todays-lunch [date]="this._currentDate"></todays-lunch>
+    <div class="col-sm-8">
+        <h4>{{ this._currentLunch.date }}</h4>
     </div>
-    <div class="col-sm-3 align-middle" align="left-md center-sm">
-        <img src="/images/next.png" (click)="nextDay()">
+    <div class="col-sm-2 align-middle" align="left-md center-sm">
+        <img src="/images/next.png" (click)="changeDay(1)">
     </div>
+</div>
+
+<div class="todays-lunch" align="center">
+    <p>{{ this._currentLunch.menu }}</p>
 </div>

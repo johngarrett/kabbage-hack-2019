@@ -49,12 +49,12 @@ app.get('/api/lineStatus', function(req, res) {
         res.sendStatus(504)
     }
 
-    db.collection('hungergames').findOne({}, function(err, docs) {
+    db.collection('hungergames').find().sort({_id:-1}).toArray(function(err, docs) {
         if (err) {
             res.sendStatus(500);
         }
 
-        res.status(200).json(docs);
+        res.status(200).json(docs[0] || {});
     });
 });
 

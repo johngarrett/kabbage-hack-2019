@@ -5,7 +5,6 @@ import { ShowMeLunchComponent } from './components/show-me-lunch/show-me-lunch.c
 import { LineStatusComponent } from './components/line-status/line-status.component';
 import { CamFeedComponent } from './components/cam-feed/cam-feed.component';
 import { LunchService } from '../services/lunch/lunch.service';
-import { TodaysLunchComponent } from './components/todays-lunch/todays-lunch.component';
 import { HungerGamesComponent } from './hunger-games.component';
 
 @NgModule({
@@ -13,7 +12,6 @@ import { HungerGamesComponent } from './hunger-games.component';
     ShowMeLunchComponent,
     LineStatusComponent,
     CamFeedComponent,
-    TodaysLunchComponent,
     HungerGamesComponent,
   ],
   imports: [

@@ -1,5 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Subject } from 'rxjs';
+import { flatMap, tap } from 'rxjs/operators';
 import * as moment from 'moment';
+
+import { Lunch } from '../../../models/lunch.model';
+import { LunchService } from '../../../services/lunch/lunch.service';
+
 
 @Component({
   selector: 'show-me-lunch',
@@ -8,20 +14,34 @@ import * as moment from 'moment';
 })
 export class ShowMeLunchComponent implements OnInit {
 
-    constructor( ) { }
+    constructor(
+        private _lunchService: LunchService,
+    ) { }
 
+    private formatString = 'ddd MM-DD-YYYY'
+
+    private _currentLunch: Lunch;
     private _currentDate: moment.Moment;
 
     ngOnInit() {
         this._currentDate = moment();
+        this._currentLunch = {
+            date: moment().format(this.formatString),
+            menu: ""
+        }
+
+        this.changeDay(0);
     }
 
-    prevDay() {
-        this._currentDate = moment(this._currentDate).subtract(1, 'days');
-    }
+    changeDay(days: number) {
+        this._currentDate = moment(this._currentDate).add(days, 'days');
 
-    nextDay() {
-        this._currentDate = moment(this._currentDate).add(1, 'days');
-    }
+        this._lunchService.getLunch(this._currentDate).pipe(
+            tap(lunch => {
+                lunch.date = moment(lunch.date).format(this.formatString)
+                this._currentLunch = lunch;
+            })
+        ).subscribe();
 
+    }
 }

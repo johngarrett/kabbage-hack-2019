@@ -18,11 +18,11 @@
             Wait time:
         </div>
         <h4>
-            {{ (_lineStatus.linePace / _lineStatus.lineLength) || 0 }} minutes
+            {{ (_lineStatus.lineLength / _lineStatus.linePace) || 0 }} minutes
         </h4>
     </div>
 
-    <div class="col-sm-12 col-md-8 card" id="hungergames-plot">
+    <div class="col-sm-12 col-md-8" id="hungergames-plot">
         Plotly
         <script>
             Plotly.newPlot('hungergames-plot', {{ data }}, {{ layout }}, { responsive: true });
