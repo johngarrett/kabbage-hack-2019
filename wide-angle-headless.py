@@ -10,6 +10,7 @@ vs = cv2.VideoCapture('videos/lunch-wide-cut.mov')
 refrence_frame = None
 
 frame_count = 0
+persons_count = 0
 while True:
     frame_count += 1
     _, current_frame = vs.read()
@@ -48,5 +49,8 @@ while True:
 
         rects.append(cv2.boundingRect(contour))
     cv2.groupRectangles(rects, 1, 5)
+    persons_count += len(rects)
 
-    print(f'PEOPLE COUNT: {len(rects)}')
+    if frame_count % 24 == 0:
+        print(f'Average persons: {persons_count // 48}')
+        persons_count = 0
