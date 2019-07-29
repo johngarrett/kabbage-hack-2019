@@ -1,12 +1,13 @@
 <div class="row">
-    <div class="col-sm-12 col-md-4" align="center">
+    <div class="col" align="center">
         <div class="sectionTitle">
             Line status:
         </div>
         <h4>
             {{ _lineStatus.lineOpen ? "Opened" : "Closed" }}
         </h4>
-        <br />
+    </div>
+    <div class="col" align="center">
         <div class="sectionTitle">
             # of people in line:
         </div>
@@ -14,6 +15,8 @@
             {{ _lineStatus.lineLength }}
         </h4>
         <br />
+    </div>
+    <div class="col" align="center">
         <div class="sectionTitle">
             Wait time:
         </div>
@@ -22,7 +25,7 @@
         </h4>
     </div>
 
-    <div class="col-sm-12 col-md-8" id="hungergames-plot">
+    <div class="col-12" id="hungergames-plot">
         Plotly
         <script>
             Plotly.newPlot('hungergames-plot', {{ data }}, {{ layout }}, { responsive: true });

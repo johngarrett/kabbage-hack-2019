@@ -49,7 +49,7 @@ app.get('/api/lineStatus', function(req, res) {
         res.sendStatus(504)
     }
 
-    db.collection('hungergames').find().sort({_id:-1}).toArray(function(err, docs) {
+    db.collection('lineStatus').find().sort({_id:-1}).toArray(function(err, docs) {
         if (err) {
             res.sendStatus(500);
         }
@@ -69,7 +69,7 @@ app.post('/api/lineStatus', function(req, res) {
 
     req.body.timestamp = moment().format();
 
-    db.collection('hungergames')
+    db.collection('lineStatus')
         .insertOne(req.body, function(err, doc) {
             if (err) {
                 res.sendStatus(500);
@@ -78,6 +78,41 @@ app.post('/api/lineStatus', function(req, res) {
             res.sendStatus(200);
         });
 });
+
+app.get('/api/foodInput', function(req, res) {
+    if (!db) {
+        res.sendStatus(504)
+    }
+
+    db.collection('foodInput').find().sort({_id:-1}).limit(10).toArray(function(err, docs) {
+        if (err) {
+            res.sendStatus(500);
+        }
+
+        res.status(200).json(docs);
+    });
+});
+
+app.post('/api/foodInput', function(req, res) {
+    if (!(req.body.ordered && req.body.leftOver && req.body.mainCourse)) {
+        res.sendStatus(400);
+    }
+
+    if (!db) {
+        res.sendStatus(504)
+    }
+
+    req.body.timestamp = moment().format();
+
+    db.collection('foodInput')
+        .insertOne(req.body, function(err, doc) {
+            if (err) {
+                res.sendStatus(500);
+            }
+
+            res.sendStatus(200);
+        });
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
