@@ -16,13 +16,13 @@ export class FoodInputComponent implements OnInit {
 
     constructor(private _lunchService: LunchService) { }
 
-    private foodInputForm = new FormGroup({
+    foodInputForm = new FormGroup({
         ordered: new FormControl(''),
         leftOver: new FormControl(''),
         mainCourse: new FormControl('')
     });
 
-    private _recentFoodInputs: Array<FoodInput>;
+    _recentFoodInputs: Array<FoodInput>;
 
     ngOnInit() {
         timer(0, 10000).pipe(

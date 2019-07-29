@@ -20,8 +20,8 @@ export class ShowMeLunchComponent implements OnInit {
 
     private formatString = 'ddd MM-DD-YYYY'
 
-    private _currentLunch: Lunch;
-    private _currentDate: moment.Moment;
+    _currentLunch: Lunch;
+    _currentDate: moment.Moment;
 
     ngOnInit() {
         this._currentDate = moment();
