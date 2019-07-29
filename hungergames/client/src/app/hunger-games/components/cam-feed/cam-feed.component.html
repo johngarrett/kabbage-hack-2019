@@ -1,14 +1,12 @@
 <div class="cam-feed">
-    <div class="cam-feed-div">
-        <img id="cam-feed-img" src="{{ this._imageSrc }}">
-    </div>
+    <img id="cam-feed-img" src="{{ this._imageSrc }}">
 
     <div class="row">
         <div class="col" align="left">
             {{ this._lastRefresh.format("h:mm a") }}
         </div>
         <div class="col" align="right">
-            <a (click)="refresh()">Refresh</a>
+            <a class="text-primary" (click)="refresh()">Refresh &#x21bb;</a>
         </div>
     </div>
 </div>
