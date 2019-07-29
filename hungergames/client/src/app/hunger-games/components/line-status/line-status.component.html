@@ -14,7 +14,6 @@
         <h4>
             {{ _lineStatus.lineLength }}
         </h4>
-        <br />
     </div>
     <div class="col" align="center">
         <div class="sectionTitle">
@@ -23,12 +22,5 @@
         <h4>
             {{ (_lineStatus.lineLength / _lineStatus.linePace) || 0 }} minutes
         </h4>
-    </div>
-
-    <div class="col-12" id="hungergames-plot">
-        Plotly
-        <script>
-            Plotly.newPlot('hungergames-plot', {{ data }}, {{ layout }}, { responsive: true });
-        </script>
     </div>
 </div>
