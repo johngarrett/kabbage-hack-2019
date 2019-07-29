@@ -1,4 +1,5 @@
 import cv2
+import sys 
 import imutils
 import datetime
 import threading
@@ -11,19 +12,21 @@ app = Flask(__name__)
 api = Api(app)
 
 persons_count = 0
-
+vs = cv2.VideoCapture('https://stream-us1-foxtrot.dropcam.com/nexus_aac/f2a6b836da604bae9ca428635c173814/chunklist_w1121249579.m3u8?public=6F7uwYxcUX')
 class PersonDetection(Resource):
     global persons_count
     def count_people():
-        vs = cv2.VideoCapture('https://stream-us1-foxtrot.dropcam.com/nexus_aac/f2a6b836da604bae9ca428635c173814/chunklist_w1121249579.m3u8?public=6F7uwYxcUX')
         refrence_frame = None
         frame_count = 0
         total_persons_count = 0
+        print(vs.isOpened)
         while True:
+            print('entering the loop', file=sys.stderr)
             frame_count += 1
             _, current_frame = vs.read()
-
+            print(vs, file=sys.stderr)
             if current_frame is None:
+                print('no current frame!', file=sys.stderr)
                 break
             
             # convert to grayscale, and blur it
@@ -57,6 +60,7 @@ class PersonDetection(Resource):
             cv2.groupRectangles(rects, 1, 5)
             total_persons_count += len(rects)
             persons_count = round(total_persons_count / frame_count)
+            print(persons_count, file=sys.stderr)
 
 class LineStatistics(Resource):
     global persons_count
@@ -75,4 +79,4 @@ class LineStatistics(Resource):
 api.add_resource(LineStatistics, '/')
 if __name__ == '__main__':
     thread = threading.Thread(target=PersonDetection.count_people).start()
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)
