@@ -4,8 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongodb = require('mongodb');
-
-var lunchesRouter = require('./routes/lunches');
+var moment = require('moment');
+var request = require('request');
 
 var app = express();
 
@@ -17,23 +17,67 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, 'client/dist/client')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api/lunches', lunchesRouter);
-
-var distDir = __dirname + "/client/dist/client";
-app.use(express.static(distDir));
-
-var db;
-mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/test", function (err, client) {
+let db;
+mongodb.MongoClient.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/HungerGames", function (err, client) {
     if (err) {
         console.log(err);
         process.exit(1);
     }
 
+    console.log('connected to mongo');
     db = client.db();
 });
-app.use(function(req,res,next){req.db = db;next();});
+
+app.get('/api/lunches/:date', function(req, res) {
+    request.get('http://lunch.kabbage.com/api/v2/lunches/' + req.params.date,
+        (error, response, body) => {
+            if (error) {
+                return res.sendStatus(400);
+            }
+
+            return res.send(response.body);
+        }
+    );
+});
+
+app.get('/api/lineStatus', function(req, res) {
+    if (!db) {
+        res.sendStatus(504)
+    }
+
+    db.collection('hungergames').find({}).toArray(function(err, docs) {
+        if (err) {
+            res.sendStatus(500);
+        }
+
+        res.status(200).json(docs);
+    });
+});
+
+app.post('/api/lineStatus', function(req, res) {
+    if (!(req.body.lineOpen && req.body.lineLength && req.body.linePace)) {
+        res.sendStatus(400);
+    }
+
+    if (!db) {
+        res.sendStatus(504)
+    }
+
+    req.body.timestamp = moment().format();
+
+    db.collection('hungergames')
+        .insertOne(req.body, function(err, doc) {
+            if (err) {
+                res.sendStatus(500);
+            }
+
+            res.sendStatus(200);
+        });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
