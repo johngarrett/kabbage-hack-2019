@@ -13,11 +13,12 @@ api = Api(app)
 persons_count = 0
 
 class PersonDetection(Resource):
+    global persons_count
     def count_people():
         vs = cv2.VideoCapture('https://stream-us1-foxtrot.dropcam.com/nexus_aac/f2a6b836da604bae9ca428635c173814/chunklist_w1121249579.m3u8?public=6F7uwYxcUX')
         refrence_frame = None
         frame_count = 0
-        
+        total_persons_count = 0
         while True:
             frame_count += 1
             _, current_frame = vs.read()
@@ -54,11 +55,11 @@ class PersonDetection(Resource):
 
                 rects.append(cv2.boundingRect(contour))
             cv2.groupRectangles(rects, 1, 5)
-            persons_count += len(rects)
-
-        display_count = round(persons_count / frame_count)
+            total_persons_count += len(rects)
+            persons_count = round(total_persons_count / frame_count)
 
 class LineStatistics(Resource):
+    global persons_count
     def line_open():
         current_time = datetime.datetime.now()
         if current_time.hour == 11 and current_time.minute > 38:
