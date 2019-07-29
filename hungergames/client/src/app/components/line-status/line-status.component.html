@@ -18,7 +18,7 @@
             Wait time:
         </div>
         <div class="sectionText">
-            {{ _lineStatus.waitTime }} minutes
+            {{ (_lineStatus.linePace / _lineStatus.lineLength) || 0 }} minutes
         </div>
     </div>
 </div>

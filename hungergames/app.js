@@ -49,7 +49,7 @@ app.get('/api/lineStatus', function(req, res) {
         res.sendStatus(504)
     }
 
-    db.collection('hungergames').find({}).toArray(function(err, docs) {
+    db.collection('hungergames').findOne({}, function(err, docs) {
         if (err) {
             res.sendStatus(500);
         }

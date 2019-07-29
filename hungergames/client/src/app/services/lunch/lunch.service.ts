@@ -18,22 +18,20 @@ export class LunchService {
     getLunch(date: moment.Moment) : Observable<Lunch> {
         let targetDate = date.format('YYYY-MM-DD');
         return this._http.get('/api/lunches/' + targetDate).pipe(
-            tap(() => console.log("requesting")),
-            catchError((err): Observable<any> => {
-                console.log(err);
-                return of({
-                    date: targetDate,
-                    menu: "Not found"
-                })
-            })
+            catchError((err): Observable<any> => of({
+                date: targetDate,
+                menu: "Not found"
+            }))
         );
     }
 
-    getLineStatus(): LineStatus {
-        return {
-            opened: false,
-            lineLength: 15,
-            waitTime: 11,
-        }
+    getLineStatus(): Observable<LineStatus> {
+        return this._http.get('/api/lineStatus/').pipe(
+            catchError((err): Observable<any> => of({
+                lineOpen: false,
+                lineLength: 0,
+                linePace: 0
+            }))
+        );
     }
 }

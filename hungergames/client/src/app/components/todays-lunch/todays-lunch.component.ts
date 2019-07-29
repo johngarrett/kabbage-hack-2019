@@ -31,9 +31,7 @@ export class TodaysLunchComponent implements OnInit, OnChanges {
     ngOnChanges () {
         this._lunchService.getLunch(this._lunchDate).pipe(
             tap(lunch => this._currentLunch = lunch)
-        ).subscribe((lunch: Lunch) => {
-            console.log(lunch);
-        });
+        ).subscribe();
     }
 
 }

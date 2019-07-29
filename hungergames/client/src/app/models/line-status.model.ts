@@ -1,5 +1,5 @@
 export interface LineStatus {
-    opened: boolean;
+    lineOpen: boolean;
     lineLength: number;
-    waitTime: number;
+    linePace: number;
 }

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { timer, of } from 'rxjs';
+import { flatMap, tap } from 'rxjs/operators';
+
 import { LineStatus } from '../../models/line-status.model';
 import { LunchService } from '../../services/lunch/lunch.service';
 
@@ -14,7 +17,21 @@ export class LineStatusComponent implements OnInit {
     private _lineStatus: LineStatus;
 
     ngOnInit() {
-        this._lineStatus = this._lunchService.getLineStatus();
+        this._lineStatus = {
+            lineOpen: false,
+            lineLength: 0,
+            linePace: 0
+        };
+
+        timer(0, 10000).pipe(
+            flatMap(_ => this._lunchService.getLineStatus()),
+            flatMap(line => of({
+                lineOpen: line.lineOpen,
+                lineLength: line.lineLength || 0,
+                linePace: line.linePace || 0,
+            })),
+            tap(line => this._lineStatus = line)
+        ).subscribe();
     }
 
 }
