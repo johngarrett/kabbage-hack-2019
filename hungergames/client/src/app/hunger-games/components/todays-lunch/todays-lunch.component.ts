@@ -1,8 +1,8 @@
 import { Component, OnInit, OnChanges, Input } from '@angular/core';
 import { tap } from 'rxjs/operators';
 
-import { Lunch } from '../../models/lunch.model';
-import { LunchService } from '../../services/lunch/lunch.service';
+import { Lunch } from '../../../models/lunch.model';
+import { LunchService } from '../../../services/lunch/lunch.service';
 import * as moment from 'moment';
 
 

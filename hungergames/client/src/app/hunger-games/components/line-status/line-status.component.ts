@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { timer, of } from 'rxjs';
 import { flatMap, tap } from 'rxjs/operators';
 
-import { LineStatus } from '../../models/line-status.model';
-import { LunchService } from '../../services/lunch/lunch.service';
+import { LineStatus } from '../../../models/line-status.model';
+import { LunchService } from '../../../services/lunch/lunch.service';
 
 @Component({
   selector: 'line-status',
