@@ -19,7 +19,7 @@ class PersonDetection(Resource):
         refrence_frame = None
         frame_count = 0
         total_persons_count = 0
-        print(vs.isOpened)
+        print(f'Video stream is opened: {vs.isOpened()}')
         while True:
             print('entering the loop', file=sys.stderr)
             frame_count += 1
