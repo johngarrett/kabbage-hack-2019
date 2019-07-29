@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { ShowMeLunchComponent } from './components/show-me-lunch/show-me-lunch.component';
 import { LineStatusComponent } from './components/line-status/line-status.component';
@@ -37,6 +38,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes)
   ],
   bootstrap: [HungerGamesComponent],
