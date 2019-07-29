@@ -15,8 +15,8 @@ export class CamFeedComponent implements OnInit {
 
     private camFeed =  "https://nexusapi-us1.camera.home.nest.com/get_image?uuid=f2a6b836da604bae9ca428635c173814&width=540&public=6F7uwYxcUX";
 
-    private _lastRefresh: moment.Moment;
-    private _imageSrc: string;
+    _lastRefresh: moment.Moment;
+    _imageSrc: string;
 
     ngOnInit() {
         this._lastRefresh = moment();
