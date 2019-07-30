@@ -61,7 +61,7 @@ class PersonDetection(Resource):
             f.close()
 
 class LineStatistics(Resource):
-    def line_open(self):
+    def line_open():
         current_time = datetime.datetime.now()
         if current_time.hour == 11 and current_time.minute > 38:
             return True
@@ -70,12 +70,12 @@ class LineStatistics(Resource):
         else:
             return False
     @app.route('/line/stats')
-    def get_stats(self):
+    def get_stats():
         f = open("personsCount", "r")
         count = int(f.read())
         f.close()
         
-        data = {'lineOpen': self.line_open(), 'lineLength':count, 'linePace':count}
+        data = {'lineOpen': LineStatistics.line_open(), 'lineLength':count, 'linePace':count}
 
         resp = app.response_class(response=json.dumps(data), status=200,mimetype='plain/text') #should have left a PR comment
         resp.headers['Access-Control-Allow-Origin'] = '*'
@@ -89,4 +89,4 @@ class LineStatistics(Resource):
         
 if __name__ == '__main__':
     threading.Thread(target=PersonDetection.count_people).start()
-    threading.Thread(target=app.run(host='0.0.0.0', port=80, debug=True)).start()
+    threading.Thread(target=app.run(host='0.0.0.0', port=80)).start()
