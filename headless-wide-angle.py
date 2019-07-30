@@ -82,7 +82,7 @@ class LineStatistics(Resource):
         return resp
     @app.route('/lunches/<string:date>')
     def get_lunches(date):
-        r = requests.get(f'http://ec2-18-212-187-168.compute-1.amazonaws.com/lunches/{date}')
+        r = requests.get(f'http://lunch.kabbage.com/api/v2/lunches/{date}')
         response = app.response_class(response=r.text, status=r.status_code,content_type=r.headers['content-type'])
         response.headers['Access-Control-Allow-Origin'] = '*'
         return response
