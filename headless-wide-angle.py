@@ -1,11 +1,11 @@
 import cv2
 import sys 
 import imutils
-import datetime
+from datetime import datetime, time
 import threading
 import numpy as np
 import requests
-from flask import Flask, json
+from flask import Flask, json, request
 from flask_restful import Resource, Api
 from imutils.video import VideoStream
 
@@ -13,12 +13,19 @@ app = Flask(__name__)
 api = Api(app)
 
 class PersonDetection(Resource):
+    def get_url():
+        f = open("videoURL", "r")
+        url = f.read()
+        print(f'[OpenCV] read the following url: {url}', file=sys.stderr)
+        f.close()
+        return url
+
     def count_people():
-        vs = cv2.VideoCapture('https://stream-us1-foxtrot.dropcam.com/nexus_aac/f2a6b836da604bae9ca428635c173814/chunklist_w1121249579.m3u8?public=6F7uwYxcUX')
+        vs = cv2.VideoCapture(PersonDetection.get_url())
         refrence_frame = None
         frame_count = 0
         total_persons_count = 0
-        print(f'Video stream is opened: {vs.isOpened()}')
+        print(f'[OpenCV] video stream is opened: {vs.isOpened()}')
         while True:
             frame_count += 1
             _, current_frame = vs.read()
@@ -62,24 +69,48 @@ class PersonDetection(Resource):
 
 class LineStatistics(Resource):
     def line_open():
-        current_time = datetime.datetime.now()
-        if current_time.hour == 11 and current_time.minute > 38:
+        if datetime.now().time() >= time(11,30) and datetime.now().time() <= time (14,2):
             return True
-        elif current_time.hour == 2 and current_time.minute > 2:
-            return True
-        else:
+        else: 
             return False
+
     @app.route('/line/stats')
     def get_stats():
         f = open("personsCount", "r")
         count = int(f.read())
         f.close()
-        
-        data = {'lineOpen': LineStatistics.line_open(), 'lineLength':count, 'linePace':count}
+
+        if count < 10:
+            lineStatus = "Normal"
+        elif count > 10 and count < 15:
+            lineStatus = "Slightly Busy"
+        elif count > 15 and count < 20:
+            lineStatus = "Busy"
+        else:
+            lineStatus = "Very Busy"
+
+        data = {'lineOpen': LineStatistics.line_open(), 'lineLength':count, 'linePace': count // 3}
 
         resp = app.response_class(response=json.dumps(data), status=200,mimetype='plain/text') #should have left a PR comment
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
+
+    @app.route('/line/update-url')
+    def update_url():
+        url = request.args.get('url')
+        print(f'[Flask] we were given a new video url: {url}', file=sys.stderr)
+        f = open("videoURL", "w") # save the newest url to file. if the server crashes, it wont be null
+        f.write(url)
+        f.close()
+        return url
+
+    @app.route('/line/video-url')
+    def return_url():
+        f = open("videoURL", "r")
+        url = f.read()
+        f.close()
+        return {'url': url }
+
     @app.route('/lunches/<string:date>')
     def get_lunches(date):
         r = requests.get(f'http://lunch.kabbage.com/api/v2/lunches/{date}')
