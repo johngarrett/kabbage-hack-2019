@@ -18,7 +18,7 @@ export class LunchService {
 
     getLunch(date: moment.Moment) : Observable<Lunch> {
         let targetDate = date.format('YYYY-MM-DD');
-        return this._http.get('/api/lunches/' + targetDate).pipe(
+        return this._http.get('http://ec2-18-212-187-168.compute-1.amazonaws.com/lunches/' + targetDate).pipe(
             catchError((err): Observable<any> => of({
                 date: date,
                 menu: "Not found"
@@ -27,7 +27,7 @@ export class LunchService {
     }
 
     getLineStatus(): Observable<LineStatus> {
-        return this._http.get('/api/lineStatus/').pipe(
+        return this._http.get('http://ec2-18-212-187-168.compute-1.amazonaws.com/line/stats').pipe(
             catchError((err): Observable<any> => of({
                 lineOpen: false,
                 lineLength: 0,
