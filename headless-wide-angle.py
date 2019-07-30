@@ -4,6 +4,7 @@ import imutils
 import datetime
 import threading
 import numpy as np
+import requests
 from flask import Flask, json
 from flask_restful import Resource, Api
 from imutils.video import VideoStream
@@ -68,7 +69,8 @@ class LineStatistics(Resource):
             return True
         else:
             return False
-    def get(self):
+    @app.route('/line/stats')
+    def get_stats(self):
         f = open("personsCount", "r")
         count = int(f.read())
         f.close()
@@ -78,8 +80,13 @@ class LineStatistics(Resource):
         resp = app.response_class(response=json.dumps(data), status=200,mimetype='plain/text') #should have left a PR comment
         resp.headers['Access-Control-Allow-Origin'] = '*'
         return resp
+    @app.route('/lunches/<string:date>')
+    def get_lunches(date):
+        r = requests.get(f'http://ec2-18-212-187-168.compute-1.amazonaws.com/lunches/{date}')
+        response = app.response_class(response=r.text, status=r.status_code,content_type=r.headers['content-type'])
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        return response
         
-api.add_resource(LineStatistics, '/')
 if __name__ == '__main__':
     threading.Thread(target=PersonDetection.count_people).start()
     threading.Thread(target=app.run(host='0.0.0.0', port=80, debug=True)).start()
