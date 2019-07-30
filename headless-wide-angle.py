@@ -4,7 +4,7 @@ import imutils
 import datetime
 import threading
 import numpy as np
-from flask import Flask
+from flask import Flask, json
 from flask_restful import Resource, Api
 from imutils.video import VideoStream
 
@@ -12,8 +12,8 @@ app = Flask(__name__)
 api = Api(app)
 
 class PersonDetection(Resource):
-    vs = cv2.VideoCapture('https://stream-us1-foxtrot.dropcam.com/nexus_aac/f2a6b836da604bae9ca428635c173814/chunklist_w1121249579.m3u8?public=6F7uwYxcUX')
     def count_people():
+        vs = cv2.VideoCapture('https://stream-us1-foxtrot.dropcam.com/nexus_aac/f2a6b836da604bae9ca428635c173814/chunklist_w1121249579.m3u8?public=6F7uwYxcUX')
         refrence_frame = None
         frame_count = 0
         total_persons_count = 0
@@ -72,9 +72,13 @@ class LineStatistics(Resource):
         f = open("personsCount", "r")
         count = int(f.read())
         f.close()
-        return {'lineOpen': self.line_open(), 'lineLength':count, 'linePace':persons_count }
+        
+        data = {'lineOpen': self.line_open(), 'lineLength':count, 'linePace':count}
 
-
+        resp = app.response_class(response=json.dumps(data), status=200,mimetype='plain/text') #should have left a PR comment
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        return resp
+        
 api.add_resource(LineStatistics, '/')
 if __name__ == '__main__':
     threading.Thread(target=PersonDetection.count_people).start()
